@@ -1,0 +1,54 @@
+
+.btn-secondary {
+  color: #6A0DAD;
+  background-color: #6A0DAD;
+  border-color: #6A0DAD;
+}
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #000000;
+  border-color: #000000;
+}
+
+
+
+.badge-success {
+  color: #ffffff;
+  background-color: #6A0DAD;
+}
+
+.btn-primary {
+  color: #fffff;
+  background-color: #6A0DAD;
+  border-color: #6A0DAD;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #000000;
+  border-color: #000000;
+}
+
+
+  h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+
+  p, span {
+  font-family: 'Open Sans', sans-serif;
+}
+}
+
+@media (max-width: 575.98px) {
+  #carouselExampleIndicators {
+    width: 100%;
+  }
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+
+.carousel-control-next-icon {
+  color: red;
+}

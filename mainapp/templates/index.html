@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Elf Bar</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    </head>
+
+
+<header>
+
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-wight">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'base' %}">
+      <img src="{% static '123.png' %}" alt="Elf Bar Logo" class="d-inline-block align-text-top" height="100" width="240">
+    </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+
+          {% if request.user.is_authenticated %}
+
+              <li class="nav-link"> {{user.username}} | <a href="{% url 'logout' %}"class ='text-dark'>Вийти</a></li>
+
+            <li class="nav-item">
+              <form class="d-flex" action="{% url 'cart' %}" method="post">
+                {% csrf_token %}
+                 <button class="btn btn-primary mt-auto" type="submit">
+                    <i class="bi-cart-fill me-1"></i>
+                   Корзина
+                 </button>
+              </form>
+            </li>
+
+
+          {% else %}
+           <li class="nav-item">
+              <form class="d-flex" action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                 <button class="btn btn-primary mx-md-1" type="submit">
+                   Увійти
+                 </button>
+              </form>
+            </li>
+
+           <li class="nav-item">
+              <form class="d-flex" action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                 <button class="btn btn-primary" type="submit">
+                   Реєстрація
+                 </button>
+              </form>
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+</header>
+
+{% block content %}
+
+<div class="container">
+            {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+        {% endif %}
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner" role="listbox">
+    <div class="carousel-item active">
+      <img class="rounded mx-auto d-block img-fluid" src="{% static '1002.jpg' %}" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="rounded mx-auto d-block img-fluid" src="{% static '3000.jpg' %}" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="rounded mx-auto d-block img-fluid" src="{% static '1.png' %}" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only" class="text-secondary">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+</div>
+
+
+
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav mx-auto justify-content-center w-100">
+          {% if categories.has_previous %}
+          <button type="button" class="btn btn-default btn-sm">
+              <a href="?page={{ categories.previous_page_number }}"><img src="{% static '271220.png' %}" width="40" height="40" alt="попередня"></a>
+          </button>
+          {% endif %}
+        {% for category in categories %}
+          <li class="nav-item mx-5" style="margin-bottom: 10px;">
+            <a href="{{ category.get_absolute_url }} " class="nav-link">
+              <div class="d-flex flex-column align-items-center">
+                <img src="{{ category.image.url }}" class="img-fluid mb-2"  width="100" height="100" alt="{{ category.name }}">
+                <span >{{ category.name }}</span>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+          {% if categories.has_next %}
+                  <button type="button" class="btn btn-default btn-sm">
+                        <a href="?page={{ categories.next_page_number }}"><img src="{% static 'right-arrow.png' %}" width="40" height="40" alt="наступна"></a>
+                  </button>
+          {% endif %}
+      </ul>
+    </div>
+  </nav>
+</div>
+
+
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-center">Новинки</h2>
+    </div>
+  </div>
+  <div class="row">
+          {% for product in products %}
+            {% if product.new == True  %}
+          <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              {% if product.sale == True  %}
+              <div class="badge bg-warning text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Знижка</div>
+              {% endif %}
+              {% if product.new == True  %}
+              <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; left: 0.5rem">Новинка</div>
+              {% endif %}
+              <a><img  src="{{ product.image.url }}" class='card-img-top' ></a>
+
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a>{{ product.title }}</a>
+                </h5>
+                <p class="text-secondary">{{ product.description|truncatechars:45 }}</p>
+                <div class="row">
+                  {% if product.sale == True  %}
+                  <div class="col-6">
+                    <h6 class="card-text">₴{{ product.new_price }}</h6>
+                    <h6 class="card-text text-secondary "> <s>₴{{ product.price }}</s></h6>
+                  </div>
+                  {% else %}
+                  <div class="col-6">
+                    <h6 class="card-text">₴{{ product.price }}</h6>
+                  </div>
+                  {% endif %}
+                <div class="col-6 text-right">
+                    {% if request.user.is_authenticated %}
+                <a href="{% url 'add_to_cart' slug=product.slug %}" class="btn btn-secondary mt-auto"><img src="{% static 'cart.png' %}" height='30'></a>
+                {% else %}
+                <a href="{% url 'register'  %}" class="btn btn-secondary mt-auto"><img src="{% static 'cart.png' %}" height='30'></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+  </div>
+</div>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="text-center">Популярні товари</h2>
+    </div>
+  </div>
+  <div class="row">
+          {% for product in products %}
+          {% if product.new != True  %}
+          <div class="col-6 col-sm-6 col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+              {% if product.sale == True  %}
+              <div class="badge bg-warning text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Знижка</div>
+              {% endif %}
+              {% if product.new == True  %}
+              <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; left: 0.5rem">Новинка</div>
+              {% endif %}
+              <a><img  src="{{ product.image.url }}" class='card-img-top' alt=""></a>
+
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a>{{ product.title }}</a>
+                </h5>
+                <p class="text-secondary">{{ product.description |truncatechars:45}}</p>
+
+                <div class="row">
+                  {% if product.sale == True  %}
+                  <div class="col-6">
+                    <h6 class="card-text">₴{{ product.new_price }}</h6>
+                    <h6 class="card-text text-secondary "> <s>₴{{ product.price }}</s></h6>
+                  </div>
+                  {% else %}
+                  <div class="col-6">
+                    <h6 class="card-text">₴{{ product.price }}</h6>
+                  </div>
+                  {% endif %}
+                    <div class="col-6 text-right">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'add_to_cart' slug=product.slug %}" class="btn btn-secondary mt-auto"><img src="{% static 'cart.png' %}" height='30'></a>
+                    {% else %}
+                    <a href="{% url 'register'  %}" class="btn btn-secondary mt-auto"><img src="{% static 'cart.png' %}" height='30'></a>
+                    {% endif %}
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}
+
+
+
+
+
+<footer class="bg-light text-center text-lg-start">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <img class="rounded mx-auto d-block" src="{% static '123.png' %}  " height='100' width="240" alt="First slide">
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Посилання</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'base' %}" class ='text-dark'>Головна</a></li>
+
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Соцмережі</h5>
+        <ul class="list-unstyled">
+          <li><a  target='_blank' href="https://www.instagram.com/elfbar_lviv_store/" class ='text-dark'>Instagram</a></li>
+          <li><a target='_blank' href="https://t.me/elfbarlvivstore" class ='text-dark'>Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2023 Всі права захищені. Наш Instagram та Telegram канал - чудовий спосіб залишатись в курсі останніх новин та подій.
+</div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
